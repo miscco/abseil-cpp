@@ -16,6 +16,7 @@
 
 
 list(APPEND CONTAINER_PUBLIC_HEADERS
+  "dense_set.h"
   "fixed_array.h"
   "inlined_vector.h"
 )
@@ -44,7 +45,6 @@ list(APPEND TEST_INSTANCE_TRACKER_LIB_SRC
   ${CONTAINER_INTERNAL_HEADERS}
 )
 
-
 absl_library(
   TARGET
     test_instance_tracker_lib
@@ -53,8 +53,6 @@ absl_library(
   PUBLIC_LIBRARIES
     absl::container
 )
-
-
 
 # test fixed_array_test
 set(FIXED_ARRAY_TEST_SRC "fixed_array_test.cc")
@@ -70,8 +68,6 @@ absl_test(
   PRIVATE_COMPILE_FLAGS
     ${ABSL_EXCEPTIONS_FLAG}
 )
-
-
 
 absl_test(
   TARGET
@@ -126,11 +122,22 @@ absl_test(
     ${ABSL_NOEXCEPTION_CXXFLAGS}
 )
 
+# test dense_set_test
+set(DENSE_SET_TEST_SRC "dense_set_test.cc")
+set(DENSE_SET_TEST_PUBLIC_LIBRARIES absl::base absl_throw_delegate test_instance_tracker_lib)
+
+absl_test(
+  TARGET
+    dense_set_test
+  SOURCES
+    ${DENSE_SET_TEST_SRC}
+  PUBLIC_LIBRARIES
+    ${DENSE_SET_TEST_PUBLIC_LIBRARIES}
+)
 
 # test test_instance_tracker_test
 set(TEST_INSTANCE_TRACKER_TEST_SRC "internal/test_instance_tracker_test.cc")
 set(TEST_INSTANCE_TRACKER_TEST_PUBLIC_LIBRARIES absl::base absl_throw_delegate test_instance_tracker_lib)
-
 
 absl_test(
   TARGET
@@ -140,5 +147,3 @@ absl_test(
   PUBLIC_LIBRARIES
     ${TEST_INSTANCE_TRACKER_TEST_PUBLIC_LIBRARIES}
 )
-
-

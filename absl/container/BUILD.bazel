@@ -166,6 +166,40 @@ cc_test(
 )
 
 cc_library(
+    name = "dense_set",
+    hdrs = ["dense_set.h"],
+    copts = ABSL_DEFAULT_COPTS,
+    deps = [
+        "//absl/algorithm",
+        "//absl/base:core_headers",
+        "//absl/memory",
+    ],
+)
+
+cc_test(
+    name = "dense_set_test",
+    srcs = ["dense_set_test.cc"],
+    copts = ABSL_TEST_COPTS + ABSL_EXCEPTIONS_FLAG,
+    deps = [
+        ":dense_set",
+        ":test_instance_tracker",
+        "//absl/memory",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "dense_set_benchmark",
+    srcs = ["dense_set_benchmark.cc"],
+    copts = ABSL_TEST_COPTS,
+    tags = ["benchmark"],
+    deps = [
+        ":dense_set",
+        "@com_github_google_benchmark//:benchmark_main",
+    ],
+)
+
+cc_library(
     name = "test_instance_tracker",
     testonly = 1,
     srcs = ["internal/test_instance_tracker.cc"],
