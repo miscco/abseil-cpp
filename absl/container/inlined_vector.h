@@ -473,9 +473,15 @@ class InlinedVector {
   // Overload of `InlinedVector::operator=()` to replace the contents of the
   // inlined vector with the contents of `other`.
   //
+  // NOTE: since allocation is performed, this move assignment operator can
+  // only be `noexcept` if the specified allocator is also `noexcept`. If this
+  // is the case, or if `other` contains allocated memory, this operator
+  // performs element-wise move construction of its contents.
+  //
   // NOTE: As a result of calling this overload, `other` may be empty or it's
   // contents may be left in a moved-from state.
-  InlinedVector& operator=(InlinedVector&& other) {
+  InlinedVector& operator=(InlinedVector&& other) noexcept(
+	  absl::allocator_is_nothrow<allocator_type>::value) {
     if (ABSL_PREDICT_FALSE(this == std::addressof(other))) return *this;
 
     if (other.storage_.GetIsAllocated()) {
